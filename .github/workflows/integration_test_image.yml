@@ -50,7 +50,8 @@ jobs:
               restart: unless-stopped
           EOF
            
-      - name: Spin Up Docker Container
-        run: |
-          docker compose pull
-          docker compose up
+      - name: Login to GHCR
+        run: echo "${{ secrets.PAT }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+
+      - name: Pull image from GHCR
+        run: docker pull ${{ github.event.inputs.image }}
