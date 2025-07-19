@@ -9,6 +9,7 @@ on:
       ref:
         description: 'Branch, tag or SHA'
         required: true
+        default:: 'main'
 
 jobs:
   build:
@@ -24,7 +25,7 @@ jobs:
       - name: Spin Up Docker Container
         run: docker compose up -d
 
-      - uses: luisboto/ngrok-tunnel-action@<VERSION>
+      - uses: luisboto/ngrok-tunnel-action@v0.1.7.2
         with:
           timeout: 1h
           port: 8080
