@@ -33,7 +33,6 @@ jobs:
       - name: Create .env file
         run: |
            echo "INTEGRATION_TESTING=true" > .env
-           echo "SIWA_APPLICATION_IDENTIFIER=${{ secrets.SIWA_APPLICATION_IDENTIFIER }}" >> .env
            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
            echo "LOG_LEVEL=info >> .env"
            
