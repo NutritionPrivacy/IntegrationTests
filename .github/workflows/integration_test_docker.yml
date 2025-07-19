@@ -44,4 +44,4 @@ jobs:
            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
            
       - name: Spin Up Docker Container
-        run: docker compose up
+        run: docker compose up --env-file .env
