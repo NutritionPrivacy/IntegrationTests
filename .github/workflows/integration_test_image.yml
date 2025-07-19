@@ -40,7 +40,7 @@ jobs:
               ports:
                 - "8080:8080"
               environment:
-                INTEGRATION_TESTING="true"
+                INTEGRATION_TESTING=true
                 JWT_SECRET=${{ secrets.JWT_SECRET }}
                 SIWA_APPLICATION_IDENTIFIER=${{ secrets.SIWA_APPLICATION_IDENTIFIER }}
                 LOG_LEVEL=info
