@@ -36,12 +36,10 @@ jobs:
         run: |
           sleep 5
           echo "ngrok URL: $(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
-          
-      - name: Create .env file
-        run: |
-           echo "INTEGRATION_TESTING=true" > .env
-           echo "SIWA_APPLICATION_IDENTIFIER=${{ secrets.SIWA_APPLICATION_IDENTIFIER }}" >> .env
-           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
            
       - name: Spin Up Docker Container
-        run: docker compose up --env-file .env
+        run: docker compose up
+        env:
+          INTEGRATION_TESTING: true
+          SIWA_APPLICATION_IDENTIFIER: ${{ secrets.SIWA_APPLICATION_IDENTIFIER }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
