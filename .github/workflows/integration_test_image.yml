@@ -39,7 +39,6 @@ jobs:
       - name: Create docker-compose.yml
         run: |
           cat > docker-compose.yml << EOF
-          version: '3.8'
 
           services:
             padeltick:
@@ -52,4 +51,6 @@ jobs:
           EOF
            
       - name: Spin Up Docker Container
-        run: docker compose up
+        run: |
+          docker compose pull
+          docker compose up
