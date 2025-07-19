@@ -40,10 +40,10 @@ jobs:
               ports:
                 - "8080:8080"
               environment:
-                INTEGRATION_TESTING=true
-                JWT_SECRET=${{ secrets.JWT_SECRET }}
-                SIWA_APPLICATION_IDENTIFIER=${{ secrets.SIWA_APPLICATION_IDENTIFIER }}
-                LOG_LEVEL=info
+                INTEGRATION_TESTING: "true"
+                JWT_SECRET: ${JWT_SECRET}
+                SIWA_APPLICATION_IDENTIFIER: ${SIWA_APPLICATION_IDENTIFIER}
+                LOG_LEVEL: "info"
               restart: unless-stopped
           EOF
            
@@ -52,3 +52,7 @@ jobs:
 
       - name: Pull image from GHCR
         run: docker compose up
+        env:
+          IMAGE: ${{ github.event.inputs.image }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SIWA_APPLICATION_IDENTIFIER: ${{ secrets.SIWA_APPLICATION_IDENTIFIER }}
