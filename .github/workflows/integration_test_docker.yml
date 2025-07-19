@@ -22,11 +22,6 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
           token: ${{ secrets.PAT }}
 
-      - name: Spin Up Docker Container
-        run: |
-           export INTEGRATION_TESTING=true
-           docker compose up -d
-
       - name: Setup ngrok
         run: |
            wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
@@ -41,5 +36,8 @@ jobs:
         run: |
           sleep 5
           echo "ngrok URL: $(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
-      - name: Keep tunnel open for 1h
-        run: sleep 3600
+          
+      - name: Spin Up Docker Container
+        run: |
+           export INTEGRATION_TESTING=true
+           docker compose up
