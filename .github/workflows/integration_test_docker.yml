@@ -25,13 +25,17 @@ jobs:
       - name: Spin Up Docker Container
         run: docker compose up -d
 
-      - name: Start ngrok for 1h
+      - name: Setup ngrok
         run: |
            wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
            tar xvzf ./ngrok-v3-stable-linux-amd64.tgz
            ./ngrok config add-authtoken ${{ secrets.NGROK_AUTHTOKEN }}
-           ./ngrok http 8080 &
-           sleep 5
-           curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
-           echo "ngrok URL: $(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
-           timeout 1h wait
+
+      - name: Start ngrok tunnel
+        run: ( timeout 1h ./ngrok http 8080 ) &
+        shell: bash
+
+      - name: Print tunnel URL
+        run: |
+          sleep 5
+          echo "ngrok URL: $(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
