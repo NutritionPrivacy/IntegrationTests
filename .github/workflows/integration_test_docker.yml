@@ -23,7 +23,9 @@ jobs:
           token: ${{ secrets.PAT }}
 
       - name: Spin Up Docker Container
-        run: docker compose up -d -e INTEGRATION_TESTING=true
+        run: |
+           export INTEGRATION_TESTING=true
+           docker compose up -d
 
       - name: Setup ngrok
         run: |
