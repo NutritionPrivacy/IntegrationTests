@@ -40,4 +40,6 @@ jobs:
       - name: Spin Up Docker Container
         run: |
            export INTEGRATION_TESTING=true
+           export SIWA_APPLICATION_IDENTIFIER=${{ secrets.SIWA_APPLICATION_IDENTIFIER }}
+           export JWT_SECRET=${{ secrets.JWT_SECRET }}
            docker compose up
