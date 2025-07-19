@@ -1,0 +1,52 @@
+name: IntegrationTestImage
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Docker image to test'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup ngrok
+        run: |
+           wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+           tar xvzf ./ngrok-v3-stable-linux-amd64.tgz
+           ./ngrok config add-authtoken ${{ secrets.NGROK_AUTHTOKEN }}
+
+      - name: Start ngrok tunnel
+        run: ( timeout 1h ./ngrok http 8080 ) &
+        shell: bash
+
+      - name: Print tunnel URL
+        run: |
+          sleep 5
+          echo "ngrok URL: $(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
+          
+      - name: Create .env file
+        run: |
+           echo "INTEGRATION_TESTING=true" > .env
+           echo "SIWA_APPLICATION_IDENTIFIER=${{ secrets.SIWA_APPLICATION_IDENTIFIER }}" >> .env
+           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+           
+      - name: Create docker-compose.yml
+        run: |
+          cat > docker-compose.yml << EOF
+          version: '3.8'
+
+          services:
+            padeltick:
+              image: ${{ github.event.inputs.image }}
+              ports:
+                - "8080:8080"
+              env_file:
+                - .env
+              restart: unless-stopped
+          EOF
+           
+      - name: Spin Up Docker Container
+        run: docker compose up
