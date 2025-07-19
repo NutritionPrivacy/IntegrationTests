@@ -25,9 +25,9 @@ jobs:
       - name: Spin Up Docker Container
         run: docker compose up -d
 
-      - uses: luisboto/ngrok-tunnel-action@v0.1.7.2
-        with:
-          timeout: 1h
-          port: 8080
-          ngrok_authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
-          tunnel_type: http
+      - name: Start ngrok for 1h
+        run: |
+           wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+           tar xvzf ./ngrok-v3-stable-linux-amd64.tgz
+           ./ngrok config add-authtoken ${{ secrets.NGROK_AUTHTOKEN }}
+           timeout 1h ./ngrok http 8080
