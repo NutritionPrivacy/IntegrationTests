@@ -54,4 +54,4 @@ jobs:
         run: echo "${{ secrets.PAT }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
       - name: Pull image from GHCR
-        run: docker pull ${{ github.event.inputs.image }}
+        run: docker compose up
