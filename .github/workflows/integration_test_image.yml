@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 90
 
     steps:
       - name: Setup ngrok
@@ -19,7 +20,7 @@ jobs:
            ./ngrok config add-authtoken ${{ secrets.NGROK_AUTHTOKEN }}
 
       - name: Start ngrok tunnel
-        run: ( timeout 1h ./ngrok http 8080 ) &
+        run: (./ngrok http 8080 ) &
         shell: bash
 
       - name: Print tunnel URL
